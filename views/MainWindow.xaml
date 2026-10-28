@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Closing="MainWindow_Closing"
         Loaded="MainWindow_Loaded"
-        Title="AutoInput" Height="160" Width="325">
+        Title="AutoInput" Height="160" Width="325" MinHeight="160" MinWidth="325">
     <Window.Resources>
         <ContextMenu x:Key="TrayMenu">
             <MenuItem Header="Mostrar ventana" Click="MenuShow_Click"/>
