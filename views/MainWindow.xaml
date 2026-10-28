@@ -1,0 +1,61 @@
+﻿<Window x:Class="AutoInput.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoInput"
+        xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
+        xmlns:converters="clr-namespace:AutoInput.converters"
+        mc:Ignorable="d"
+        Closing="MainWindow_Closing"
+        Loaded="MainWindow_Loaded"
+        Title="AutoInput" Height="160" Width="325">
+    <Window.Resources>
+        <ContextMenu x:Key="TrayMenu">
+            <MenuItem Header="Mostrar ventana" Click="MenuShow_Click"/>
+            <Separator/>
+            <MenuItem Header="Salir" Click="MenuExit_Click"/>
+        </ContextMenu>
+        <converters:KeyCodeNameConverter x:Key="KeyCodeNameConverter"/>
+        <converters:MouseButtonNameConverter x:Key="MouseButtonNameConverter"/>
+    </Window.Resources>
+    <Grid>
+        <tb:TaskbarIcon ToolTipText="AutoInput" IconSource="/assets/img/mouse.ico" MenuActivation="LeftOrRightClick" PopupActivation="DoubleClick" ContextMenu="{StaticResource TrayMenu}"/>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <Label>Dipositivo</Label>
+            <ComboBox x:Name="DeviceBox" MinWidth="110" ItemsSource="{Binding DeviceTypes}" SelectedIndex="0" SelectionChanged="DeviceBox_Changed"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <Label>Input</Label>
+            <ComboBox x:Name="KeyCodeBox" Visibility="Hidden" MinWidth="160" ItemsSource="{Binding KeyCodes}" SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource KeyCodeNameConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox x:Name="MouseCodeBox" Visibility="Hidden" MinWidth="160" ItemsSource="{Binding MouseButtons}" SelectedIndex="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource MouseButtonNameConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <Label Grid.Row="1" Margin="10">F8: Iniciar</Label>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+    </Grid>
+</Window>
