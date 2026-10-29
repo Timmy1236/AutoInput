@@ -2,7 +2,9 @@
 using SharpHook;
 using SharpHook.Data;
 using System.ComponentModel;
+using System.Media;
 using System.Windows;
+using System.Windows.Input;
 
 namespace AutoInput
 {
@@ -17,7 +19,7 @@ namespace AutoInput
     {
         public KeyCode[] KeyCodes { get; } = Enum.GetValues<KeyCode>();
         public DeviceType[] DeviceTypes { get; } = Enum.GetValues<DeviceType>();
-        public MouseButton[] MouseButtons { get; } = Enum.GetValues<MouseButton>();
+        public SharpHook.Data.MouseButton[] MouseButtons { get; } = Enum.GetValues<SharpHook.Data.MouseButton>();
 
         private readonly GlobalHook _globalHook;
         private readonly InputAutomation _inputAutomation;
@@ -63,10 +65,25 @@ namespace AutoInput
                 // NOTE: Es necesario hacer que esto sea configurable y no solamente 'F8'
                 if (e.Data.KeyCode == KeyCode.VcF8)
                 {
-                    DeviceType device = (DeviceType)DeviceBox.SelectedItem;
-                    KeyCode keySelec = (KeyCode)KeyCodeBox.SelectedItem;
-                    MouseButton mouseSelec = (MouseButton)MouseCodeBox.SelectedItem;
-                    _inputAutomation.startAutoInput(device, keySelec, mouseSelec);
+                    int delay = int.TryParse(DelayBox.Text, out int delayN) ? delayN : 10;
+                    int delayRandom = int.TryParse(DelayRandomBox.Text, out int delayRandomN) ? delayRandomN : 0;
+
+                    switch ((DeviceType)DeviceBox.SelectedItem)
+                    {
+                        case DeviceType.Vacio:
+                            MessageBox.Show("Necesitas seleccionar primero un dipositivo para automatizar.", "Dipositivo vacio!", MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
+                        case DeviceType.Mouse:
+                            SharpHook.Data.MouseButton mouseSelec = (SharpHook.Data.MouseButton)MouseCodeBox.SelectedItem;
+                            _inputAutomation.StartAutoInput(DeviceType.Mouse, mouseSelec, delay, delayRandom);
+                            break;
+                        case DeviceType.Teclado:
+                            KeyCode keySelec = (KeyCode)KeyCodeBox.SelectedItem;
+                            _inputAutomation.StartAutoInput(DeviceType.Teclado, keySelec, delay, delayRandom);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             });
         }
@@ -94,6 +111,18 @@ namespace AutoInput
 
                 }
             }
+        }
+
+        private void DelayBoxValidation(object sender, TextCompositionEventArgs e)
+        {
+            if (!e.Text.All(cc => Char.IsNumber(cc)))
+            {
+                e.Handled = false;
+                SystemSounds.Exclamation.Play();
+
+            }
+            e.Handled = !e.Text.All(cc => Char.IsNumber(cc));
+            base.OnPreviewTextInput(e);
         }
     }
 }

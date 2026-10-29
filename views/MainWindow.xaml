@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Closing="MainWindow_Closing"
         Loaded="MainWindow_Loaded"
-        Title="AutoInput" Height="160" Width="325" MinHeight="160" MinWidth="325">
+        Title="AutoInput" Height="230" Width="325" MinHeight="230" MinWidth="325">
     <Window.Resources>
         <ContextMenu x:Key="TrayMenu">
             <MenuItem Header="Mostrar ventana" Click="MenuShow_Click"/>
@@ -45,7 +45,19 @@
             </ComboBox>
         </StackPanel>
 
-        <Label Grid.Row="1" Margin="10">F8: Iniciar</Label>
+
+
+        <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <Label>Delay (ms)</Label>
+            <TextBox x:Name="DelayBox" PreviewTextInput="DelayBoxValidation" MinWidth="110">10</TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <Label>Delay random (ms)</Label>
+            <TextBox x:Name="DelayRandomBox" PreviewTextInput="DelayBoxValidation" MinWidth="160">0</TextBox>
+        </StackPanel>
+
+        <Label Grid.Row="2" Margin="10">F8: Iniciar</Label>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -54,6 +66,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
