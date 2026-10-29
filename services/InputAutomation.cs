@@ -8,11 +8,12 @@ namespace AutoInput.services
         Random random = new Random();
         private bool _activated = false;
         private readonly EventSimulator _simulator = EventSimulator.Create("AutoInput");
+        public event Action<bool>? StatusChanged;
 
         // Teclado
         public async void StartAutoInput(DeviceType device, KeyCode keySelec, int delay = 10, int delayRandom = 0)
         {
-            _activated = !_activated;
+            ToggleState();
 
             while (_activated)
             {
@@ -25,7 +26,7 @@ namespace AutoInput.services
         // Mouse
         public async void StartAutoInput(DeviceType device, MouseButton mouseSelec, int delay = 10, int delayRandom = 0)
         {
-            _activated = !_activated;
+            ToggleState();
 
             while (_activated)
             {
@@ -34,6 +35,12 @@ namespace AutoInput.services
 
                 await Task.Delay(delay + random.Next(delayRandom));
             }
+        }
+
+        private void ToggleState()
+        {
+            _activated = !_activated;
+            StatusChanged?.Invoke(_activated);
         }
     }
 }

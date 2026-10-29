@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Media;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace AutoInput
 {
@@ -28,9 +29,12 @@ namespace AutoInput
         {
             InitializeComponent();
             DataContext = this;
+
             _inputAutomation = new InputAutomation();
             _globalHook = new GlobalHook();
+
             _globalHook.KeyPressed += OnGlobalKeyPressed;
+            _inputAutomation.StatusChanged += ChangeActiveStatus;
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -88,6 +92,17 @@ namespace AutoInput
             });
         }
 
+        private void ChangeActiveStatus(bool status)
+        {
+            if (status)
+            {
+                ActiveStatus.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(115, 151, 106));
+            } else
+            {
+                ActiveStatus.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(189, 68, 68));
+            }
+        }
+
         private void DeviceBox_Changed(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (DeviceBox.SelectedItem is DeviceType selectedDevice)
@@ -119,8 +134,8 @@ namespace AutoInput
             {
                 e.Handled = false;
                 SystemSounds.Exclamation.Play();
-
             }
+
             e.Handled = !e.Text.All(cc => Char.IsNumber(cc));
             base.OnPreviewTextInput(e);
         }

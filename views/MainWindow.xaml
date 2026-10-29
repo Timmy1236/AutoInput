@@ -57,7 +57,8 @@
             <TextBox x:Name="DelayRandomBox" PreviewTextInput="DelayBoxValidation" MinWidth="160">0</TextBox>
         </StackPanel>
 
-        <Label Grid.Row="2" Margin="10">F8: Iniciar</Label>
+        <Label Grid.Row="3" Margin="10, 0, 0, 0">F8: Iniciar</Label>
+        <Rectangle x:Name="ActiveStatus" Grid.Row="4" Grid.ColumnSpan="3" Fill="Gray" />
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -69,6 +70,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
     </Grid>
 </Window>
